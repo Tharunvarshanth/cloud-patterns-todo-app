@@ -1,0 +1,47 @@
+service: user-service
+provider:
+  name: aws
+  endpointType: REGIONAL
+  versionFunctions: false
+  architecture: arm64
+  runtime: nodejs18.x
+  stage: dev
+  region: ap-south-1
+
+functions:
+  login:
+    handler: routes.auth.index.login
+    memorySize: 128
+    description: user login process
+    events:
+      - http:
+          path: /api/auth/login
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+  signup:
+    handler: routes.auth.index.signup
+    memorySize: 128
+    description: user registration process
+    events:
+      - http:
+          path: /api/auth/sign-up
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+  confirmation:
+    handler: routes.auth.index.confirmation
+    memorySize: 128
+    description: user confirmation process
+    events:
+      - http:
+          path: /api/auth/confirmation
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
