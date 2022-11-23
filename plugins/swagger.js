@@ -1,6 +1,7 @@
 'use strict'
 const fp = require("fastify-plugin")
 const pack = require("./../package.json")
+
 module.exports = fp(async function(fastify, opts) {
   const OAS3Format = {
     routePrefix: '/docs',
@@ -8,12 +9,11 @@ module.exports = fp(async function(fastify, opts) {
     exposeRoute: true,
     openapi: {
       info: {
-        title: 'ToDo API',
+        title: 'Todo API',
         version: pack.version,
       },
-      tags: [
-        {
-          "name": "ToDo End point",
+      tags: [{
+          "name": "ToDo",
         },
       ],
       components: {
@@ -33,8 +33,8 @@ module.exports = fp(async function(fastify, opts) {
     uiHooks: {
       onRequest: function(request, reply, next) { next(); },
       preHandler: function(request, reply, next) {
-          next();
-        }
+               next(); 
+      }
     },
     staticCSP: true,
     transformStaticCSP: (header) => header,
