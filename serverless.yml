@@ -10,36 +10,36 @@ provider:
 
 functions:
   login:
-    handler: routes.auth.index.login
+    handler: routes/auth/index.login
     memorySize: 128
     description: user login process
     events:
       - http:
-          path: /api/auth/login
+          path: login
           method: post
           cors:
             origin: "*"
             headers:
               - Content-Type
   signup:
-    handler: routes.auth.index.signup
+    handler: routes/auth/index.signup
     memorySize: 128
     description: user registration process
     events:
       - http:
-          path: /api/auth/sign-up
+          path: api/auth/sign-up
           method: post
           cors:
             origin: "*"
             headers:
               - Content-Type
   confirmation:
-    handler: routes.auth.index.confirmation
+    handler: routes/auth/index.confirmation
     memorySize: 128
     description: user confirmation process
     events:
       - http:
-          path: /api/auth/confirmation
+          path: api/auth/confirmation
           method: post
           cors:
             origin: "*"

@@ -1,6 +1,6 @@
 module.exports.login = async function (fastify, opts) {
-  fastify.get(
-    "/",
+  fastify.post(
+    "/login",
     {
       schema: {
         tags: ["Log"],
@@ -26,8 +26,8 @@ module.exports.login = async function (fastify, opts) {
 };
 
 module.exports.signup = async function (fastify, opts) {
-  fastify.get(
-    "/",
+  fastify.post(
+    "/register",
     {
       schema: {
         tags: ["Log"],
@@ -53,8 +53,8 @@ module.exports.signup = async function (fastify, opts) {
 };
 
 module.exports.confirmation = async function (fastify, opts) {
-  fastify.get(
-    "/",
+  fastify.post(
+    "/confirmation",
     {
       schema: {
         tags: ["Log"],
