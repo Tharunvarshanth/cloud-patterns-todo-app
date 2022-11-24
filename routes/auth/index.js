@@ -1,80 +1,28 @@
-module.exports.login = async function (fastify, opts) {
+"use strict";
+
+ const login = async function (fastify, opts) {
   fastify.post(
     "/login",
-    {
-      schema: {
-        tags: ["Log"],
-        params: {
-          type: "object",
-          properties: {
-            lang: {
-              type: "string",
-              default: "zh",
-            },
-            participantId: {
-              type: "number",
-              default: 1,
-            },
-          },
-        },
-      },
-    },
-    async function (request, reply) {
-      return "this is an example";
+    async (request, reply) => {
+      return "login route";
     }
   );
 };
+module.exports = login
+// const register = async function (fastify, opts) {
+//   fastify.post(
+//     "/register",
+//     async (request, reply) => {
+//       return "register route";
+//     }
+//   );
+// };
 
-module.exports.signup = async function (fastify, opts) {
-  fastify.post(
-    "/register",
-    {
-      schema: {
-        tags: ["Log"],
-        params: {
-          type: "object",
-          properties: {
-            lang: {
-              type: "string",
-              default: "zh",
-            },
-            participantId: {
-              type: "number",
-              default: 1,
-            },
-          },
-        },
-      },
-    },
-    async function (request, reply) {
-      return "this is an example";
-    }
-  );
-};
-
-module.exports.confirmation = async function (fastify, opts) {
-  fastify.post(
-    "/confirmation",
-    {
-      schema: {
-        tags: ["Log"],
-        params: {
-          type: "object",
-          properties: {
-            lang: {
-              type: "string",
-              default: "zh",
-            },
-            participantId: {
-              type: "number",
-              default: 1,
-            },
-          },
-        },
-      },
-    },
-    async function (request, reply) {
-      return "this is an example";
-    }
-  );
-};
+// const confirmation = async function (fastify, opts) {
+//   fastify.post(
+//     "/confirmation",
+//     async (request, reply) => {
+//       return "confirmation route";
+//     }
+//   );
+// };
