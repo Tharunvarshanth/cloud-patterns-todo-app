@@ -6,12 +6,12 @@
     },
     "provider": {
       "name": "aws",
-      "endpointType": "REGIONAL",
-      "versionFunctions": false,
-      "architecture": "arm64",
       "runtime": "nodejs18.x",
+      "memorySize": 512,
+      "timeout": 15,
       "stage": "dev",
-      "region": "ap-south-1",
+      "region": "us-east-1",
+      "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -85,10 +85,10 @@
               }
             }
           },
-          "SignupLogGroup": {
+          "ApiLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/user-service-dev-signup"
+              "LogGroupName": "/aws/lambda/user-service-dev-api"
             }
           },
           "IamRoleLambdaExecution": {
@@ -168,24 +168,20 @@
               }
             }
           },
-          "SignupLambdaFunction": {
+          "ApiLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/user-service/dev/1669262097294-2022-11-24T03:54:57.294Z/user-service.zip"
+                "S3Key": "serverless/user-service/dev/1669286197442-2022-11-24T10:36:37.442Z/user-service.zip"
               },
-              "Handler": "routes/api/auth/index",
+              "Handler": "lambda.handler",
               "Runtime": "nodejs18.x",
-              "FunctionName": "user-service-dev-signup",
-              "MemorySize": 128,
-              "Timeout": 6,
-              "Architectures": [
-                "arm64"
-              ],
-              "Description": "user registration process",
+              "FunctionName": "user-service-dev-api",
+              "MemorySize": 512,
+              "Timeout": 15,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -194,8 +190,18 @@
               }
             },
             "DependsOn": [
-              "SignupLogGroup"
+              "ApiLogGroup"
             ]
+          },
+          "ApiLambdaVersionWb4RNU8mVp5KMJSUnD7MOH9chW2oxtbhXZDNrKZU": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ApiLambdaFunction"
+              },
+              "CodeSha256": "X93cPwxRiFsHMknzPQAdnRGl7KUcIrN0jW9Z17+SsoY="
+            }
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
@@ -203,7 +209,7 @@
               "Name": "dev-user-service",
               "EndpointConfiguration": {
                 "Types": [
-                  "REGIONAL"
+                  "EDGE"
                 ]
               },
               "Policy": ""
@@ -255,7 +261,7 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "SignupLambdaFunction",
+                          "ApiLambdaFunction",
                           "Arn"
                         ]
                       },
@@ -267,10 +273,59 @@
               "MethodResponses": []
             },
             "DependsOn": [
-              "SignupLambdaPermissionApiGateway"
+              "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1669262073894": {
+          "ApiGatewayMethodAny": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "ANY",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "ApiLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1669286156455": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -279,15 +334,16 @@
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodProxyVarAny"
+              "ApiGatewayMethodProxyVarAny",
+              "ApiGatewayMethodAny"
             ]
           },
-          "SignupLambdaPermissionApiGateway": {
+          "ApiLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "SignupLambdaFunction",
+                  "ApiLambdaFunction",
                   "Arn"
                 ]
               },
@@ -327,6 +383,15 @@
             },
             "Export": {
               "Name": "sls-user-service-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "ApiLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ApiLambdaVersionWb4RNU8mVp5KMJSUnD7MOH9chW2oxtbhXZDNrKZU"
+            },
+            "Export": {
+              "Name": "sls-user-service-dev-ApiLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -443,26 +508,23 @@
     },
     "pluginsData": {},
     "functions": {
-      "signup": {
-        "handler": "routes/api/auth/index",
-        "memorySize": 128,
-        "description": "user registration process",
+      "api": {
+        "handler": "lambda.handler",
         "events": [
           {
-            "http": {
-              "path": "{proxy+}",
-              "method": "any",
-              "properties": null,
-              "integration": "AWS_PROXY"
-            }
+            "http": "ANY {proxy+}"
+          },
+          {
+            "http": "ANY /"
           }
         ],
-        "name": "user-service-dev-signup",
+        "name": "user-service-dev-api",
         "package": {},
-        "memory": 128,
-        "timeout": 6,
+        "memory": 512,
+        "timeout": 15,
         "runtime": "nodejs18.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "ApiLambdaVersionWb4RNU8mVp5KMJSUnD7MOH9chW2oxtbhXZDNrKZU"
       }
     },
     "configValidationMode": "warn",
@@ -478,10 +540,10 @@
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "F:\\UNIVERSITY NOTES And Professionals\\4TH YEAR\\1st sem\\SENG 41283 - Distributed and Cloud Computing\\Group Project\\cloud-patterns-todo-app\\.serverless\\user-service.zip"
+    "artifact": "D:\\assingment\\toDoAPI\\.serverless\\user-service.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/user-service/dev/1669262097294-2022-11-24T03:54:57.294Z",
+    "artifactDirectoryName": "serverless/user-service/dev/1669286197442-2022-11-24T10:36:37.442Z",
     "artifact": "user-service.zip"
   }
 }

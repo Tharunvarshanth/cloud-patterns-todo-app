@@ -1,28 +1,58 @@
 "use strict";
 
- const login = async function (fastify, opts) {
+module.exports = async function (fastify, opts) {
   fastify.post(
+    "/register",
+    {
+      schema: {
+        tags: ["ToDo"],
+        body: {
+          type: "object",
+          properties: {
+            email: {
+              type: "string",
+              default: "nnirosh447@gmail.com",
+            },
+            name: {
+              type: "string",
+              default: "name",
+            },
+            password: {
+              type: "string",
+              default: "todo@12345",
+            },
+          },
+        },
+      },
+    },
+    async function (request, reply) {
+      var data = await fastify.awsConfig.signup(request);
+      console.log(data);
+      return data;
+    }
+  );
+
+  fastify.get(
     "/login",
-    async (request, reply) => {
-      return "login route";
+    {
+      schema: {
+        tags: ["ToDo"],
+      },
+    },
+    async function (request, reply) {
+      return "Login Route";
+    }
+  );
+
+  fastify.get(
+    "/confirmation",
+    {
+      schema: {
+        tags: ["ToDo"],
+      },
+    },
+    async function (request, reply) {
+      return "Confirmation Route";
     }
   );
 };
-module.exports = login
-// const register = async function (fastify, opts) {
-//   fastify.post(
-//     "/register",
-//     async (request, reply) => {
-//       return "register route";
-//     }
-//   );
-// };
-
-// const confirmation = async function (fastify, opts) {
-//   fastify.post(
-//     "/confirmation",
-//     async (request, reply) => {
-//       return "confirmation route";
-//     }
-//   );
-// };

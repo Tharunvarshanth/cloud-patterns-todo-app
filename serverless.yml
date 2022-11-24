@@ -1,47 +1,16 @@
 service: user-service
+
 provider:
-  name: aws
-  endpointType: REGIONAL
-  versionFunctions: false
-  architecture: arm64
-  runtime: nodejs18.x
-  stage: dev
-  region: ap-south-1
+ name: aws
+ runtime: nodejs18.x # Node JS version
+ memorySize: 512
+ timeout: 15
+ stage: dev
+ region: us-east-1 # AWS region
 
 functions:
-  login:
-    handler: routes/auth/index.login
-    memorySize: 128
-    description: user login process
-    events:
-      - http:
-          path: login
-          method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-  signup:
-    handler: routes/auth/index.signup
-    memorySize: 128
-    description: user registration process
-    events:
-      - http:
-          path: api/auth/sign-up
-          method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-  confirmation:
-    handler: routes/auth/index.confirmation
-    memorySize: 128
-    description: user confirmation process
-    events:
-      - http:
-          path: api/auth/confirmation
-          method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
+ api:
+   handler: lambda.handler
+   events:
+     - http: ANY {proxy+}
+     - http: ANY /
