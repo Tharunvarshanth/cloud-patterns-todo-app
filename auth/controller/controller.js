@@ -33,8 +33,8 @@ function doSignup(req, attributeList, callback) {
 function doLogin(req, callback) {
   console.log("doLogin", req.body);
   var authenticationData = {
-    username: req.body.email,
-    password: req.body.password,
+    Username: req.body.email,
+    Password: req.body.password,
   };
   const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
   var userData = {
