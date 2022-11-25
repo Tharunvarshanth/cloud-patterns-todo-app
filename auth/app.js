@@ -12,9 +12,17 @@ const client = new Client({
   user: "postgres",
   password: "rootroot",
   database: "todo",
+  timeout: 60000,
 });
 
-client.connect();
+client
+  .connect()
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 const { signUp } = require("./controller/controller");
