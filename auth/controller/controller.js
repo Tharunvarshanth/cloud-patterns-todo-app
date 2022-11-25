@@ -12,6 +12,7 @@ function doSignup(req, attributeList, callback) {
     if (err) {
       console.log(err.message || JSON.stringify(err));
       callback(err, null);
+      return;
     }
     console.log(result);
     var cognitoUser = result.user;
@@ -24,15 +25,13 @@ function doSignup(req, attributeList, callback) {
       },
     });*/
     console.log(data);
-    callback(data, res);
+    callback(null, result);
   });
 }
 
 exports.signUp = (req, res) => {
-  console.log("knk");
-  res.json({ xxl: "xxx" });
-  // console.log(JSON.parse(req.body));
-  /* var dataEmail = {
+  console.log(req.body);
+  var dataEmail = {
     Name: "email",
     Value: req.body?.email,
   };
@@ -49,29 +48,10 @@ exports.signUp = (req, res) => {
   const signUpCallback = doSignup(req, attributeList, function (err, cogres) {
     if (err) {
       console.log(err);
-      return res.status(400).send("Error with create initial data try again");
+      return res.status(400).send({ err: err });
     } else {
-      return res.json(cogres);
+      return res.json({ res: cogres });
     }
   });
-  /*
-  userPool.signUp(req.body.email, req.body.password, attributeList, null, async function (err, result) {
-    if (err) {
-      console.log(err.message || JSON.stringify(err));
-      res.status(400).send({ err: err });
-      return;
-    }
-    console.log(result);
-    var cognitoUser = result.user;
-    console.log("user name is " + cognitoUser.getUsername());
-    console.log("user name is " + result.userSub);
-    var data = await prisma.users.create({
-      data: {
-        key: result.userSub,
-        name: cognitoUser.getUsername(),
-      },
-    });
-    console.log(data);
-    // res.json({ res: result });
-  });*/
+  return;
 };
