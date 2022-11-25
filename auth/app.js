@@ -4,15 +4,15 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const {Client} = require('pg')
+const { Client } = require("pg");
 
 const client = new Client({
-    host: "localhost",
-    port : 5432,
-    user: "postgres",
-    password: "root",
-    database: "todo"
-})
+  host: "localhost",
+  port: 5432,
+  user: "postgres",
+  password: "rootroot",
+  database: "todo",
+});
 
 client.connect();
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
