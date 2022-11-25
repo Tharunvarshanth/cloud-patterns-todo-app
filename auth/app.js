@@ -4,17 +4,25 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const { Client } = require("pg");
-
+/*const { Client } = require("pg");
+/*
 const client = new Client({
-  host: "localhost",
+  host: "todo.cdle6ghs5azs.ap-south-1.rds.amazonaws.com",
   port: 5432,
   user: "postgres",
   password: "rootroot",
   database: "todo",
 });
 
-client.connect();
+client
+  .connect()
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  */
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 const { signUp } = require("./controller/controller");
@@ -29,46 +37,26 @@ const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 //Static content ie images
 app.use("/static", express.static("static"));
 
-router.use(cors());
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
+//router.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 router.post("/sign-up", signUp);
 
-/*var dataEmail = {
-    Name: "email",
-    Value: "nnirosh447@gmail.com",
-  };
-
-  var dataName = {
-    Name: "name",
-    Value: "Niroshan",
-  };
-  var attributeList = [];
-  var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
-  var attributeName = new AmazonCognitoIdentity.CognitoUserAttribute(dataName);
-  attributeList.push(attributeEmail);
-  attributeList.push(attributeName);
-
-  userPool.signUp("nnirosh447@gmail.com", "todo@12345", attributeList, null, async function (err, result) {
-    if (err) {
-      console.log(err.message || JSON.stringify(err));
-      res.status(400).send({ err: err });
-      return;
-    }
-    var cognitoUser = result.user;
-    console.log("user name is " + cognitoUser.getUsername());
-    res.json({ res: result });
-  });
-  res.send({ res: "no-response" });*/
-
 router.get("/index", function (req, res) {
-  res.send({});
+  res.send(200);
 });
 
 app.use("/", router);
+
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
 module.exports = app;

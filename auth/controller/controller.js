@@ -1,6 +1,6 @@
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
-const PrismaClient = require("@prisma/client").PrismaClient;
-const prisma = new PrismaClient();
+//const PrismaClient = require("@prisma/client").PrismaClient;
+//const prisma = new PrismaClient();
 var poolData = {
   UserPoolId: "ap-south-1_FCM3q2v34", // Your user pool id here
   ClientId: "6k8it7fkegj23mu7bkshdm01fj", // Your client id here
@@ -17,40 +17,41 @@ function doSignup(req, attributeList, callback) {
     var cognitoUser = result.user;
     console.log("user name is " + cognitoUser.getUsername());
     console.log("user name is " + result.userSub);
-    var data = await prisma.users.create({
+    /* var data = await prisma.users.create({
       data: {
         key: result.userSub,
         name: cognitoUser.getUsername(),
       },
-    });
+    });*/
     console.log(data);
     callback(data, res);
   });
 }
 
 exports.signUp = (req, res) => {
-  console.log(req.body);
-  var dataEmail = {
+  console.log("knk");
+  res.json({ xxl: "xxx" });
+  // console.log(JSON.parse(req.body));
+  /* var dataEmail = {
     Name: "email",
-    Value: req.body.email,
+    Value: req.body?.email,
   };
 
   var dataName = {
     Name: "name",
-    Value: req.body.name,
+    Value: req.body?.name,
   };
   var attributeList = [];
   var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
   var attributeName = new AmazonCognitoIdentity.CognitoUserAttribute(dataName);
   attributeList.push(attributeEmail);
   attributeList.push(attributeName);
-  const signUpCallback = doSignup(req, attributeList, function (err, res) {
+  const signUpCallback = doSignup(req, attributeList, function (err, cogres) {
     if (err) {
       console.log(err);
       return res.status(400).send("Error with create initial data try again");
     } else {
-      print(result[0]);
-      return res.json(result[0]);
+      return res.json(cogres);
     }
   });
   /*
