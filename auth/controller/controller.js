@@ -30,6 +30,55 @@ function doSignup(req, attributeList, callback) {
   });
 }
 
+function doLogin(req, callback) {
+  console.log("doLogin", req.body);
+  var authenticationData = {
+    username: req.body.email,
+    password: req.body.password,
+  };
+  const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+  var userData = {
+    Username: req.body.email,
+    Pool: userPool,
+  };
+  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  cognitoUser.authenticateUser(authenticationDetails, {
+    onSuccess: function (result) {
+      /*  console.log("Access Token:" + JSON.stringify(jwt_decode(result.getAccessToken().getJwtToken())));
+      console.log("Id Token + " + JSON.stringify(jwt_decode(result.getIdToken().getJwtToken())));
+      console.log("Refresh Token + " + JSON.stringify(result.getRefreshToken().getToken()));*/
+      callback(null, result);
+      return;
+    },
+    onFailure: function (err) {
+      console.error(err);
+      callback(err, null);
+      return;
+    },
+    mfaRequired: (codeDeliveryDetails) => {
+      console.error(codeDeliveryDetails);
+      cognitoUser.sendMFACode(mfaCode, this);
+    },
+  });
+}
+
+function doVerification(req, callback) {
+  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+  var userData = {
+    Username: req.body.email,
+    Pool: userPool,
+  };
+  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  cognitoUser.confirmRegistration(req.body.code, true, function (err, result) {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    console.log("call result: " + result);
+    callback(null, result);
+  });
+}
+
 exports.signUp = (req, res) => {
   console.log(req.body);
   var dataEmail = {
@@ -49,6 +98,31 @@ exports.signUp = (req, res) => {
   const signUpCallback = doSignup(req, attributeList, function (err, cogres) {
     if (err) {
       console.log(err);
+      return res.status(400).send(err);
+    } else {
+      return res.json(cogres);
+    }
+  });
+};
+
+exports.confirmation = (req, res) => {
+  console.log(req.body);
+
+  const signUpCallback = doVerification(req, function (err, cogres) {
+    if (err) {
+      console.log(err);
+      return res.status(400).send(err);
+    } else {
+      return res.json(cogres);
+    }
+  });
+};
+
+exports.login = (req, res) => {
+  console.log(req.body);
+
+  const signInCallback = doLogin(req, function (err, cogres) {
+    if (err) {
       return res.status(400).send(err);
     } else {
       return res.json(cogres);

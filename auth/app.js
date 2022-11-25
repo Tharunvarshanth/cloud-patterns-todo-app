@@ -12,7 +12,6 @@ const client = new Client({
   user: "postgres",
   password: "rootroot",
   database: "todo",
-  timeout: 60000,
 });
 
 client
@@ -25,7 +24,7 @@ client
   });
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
-const { signUp } = require("./controller/controller");
+const { signUp, login, confirmation } = require("./controller/controller");
 
 var poolData = {
   UserPoolId: "ap-south-1_FCM3q2v34", // Your user pool id here
@@ -45,6 +44,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 router.post("/sign-up", signUp);
+router.post("/login", login);
+router.post("/confirmation", confirmation);
 
 router.get("/index", function (req, res) {
   res.send({});

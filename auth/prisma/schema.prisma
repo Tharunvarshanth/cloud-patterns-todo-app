@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "todo-app-cloud.cdle6ghs5azs.ap-south-1.rds.amazonaws.com"
 }
 
 model migrations {
