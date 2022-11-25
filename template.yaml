@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+
+Globals:
+  Function:
+    Timeout: 600
+
+Resources:
+  AuthApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      BinaryMediaTypes: ["*/*"]
+
+  AuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: auth/
+      Handler: lambda.handler
+      Runtime: nodejs18.x
+      MemorySize: 512
+      Events:
+        AuthFunctionProxy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AuthApi
+            Path: "/{proxy+}"
+            Method: ANY
+        AuthFunctionRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AuthApi
+            Path: "/"
+            Method: ANY
+
+Outputs:
+  AuthFunctiondApi:
+    Description: "API Gateway endpoint URL for dev stage for Auth function"
+    Value: !Sub "https://${AuthApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
+  AuthFunction:
+    Description: "Auth Lambda Function ARN"
+    Value: !GetAtt AuthFunction.Arn
+  AuthFunctionIamRole:
+    Description: "Implicit IAM Role created for Auths function"
+    Value: !GetAtt AuthFunctionRole.Arn
