@@ -24,7 +24,7 @@ function doSignup(req, attributeList, callback) {
         name: cognitoUser.getUsername(),
       },
     });
-    console.log(data);
+    console.log(">>>>>>>>>DB USER:>>>>>", data);
     callback(null, result);
     return;
   });
@@ -44,12 +44,6 @@ function doLogin(req, callback) {
   var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
   cognitoUser.authenticateUser(authenticationDetails, {
     onSuccess: async function (result) {
-      var data = await prisma.users.create({
-        data: {
-          key: "e89d7874-ab55-4d1f-93ec-e33af63d8e54",
-          name: cognitoUser.getUsername(),
-        },
-      });
       /*  console.log("Access Token:" + JSON.stringify(jwt_decode(result.getAccessToken().getJwtToken())));
       console.log("Id Token + " + JSON.stringify(jwt_decode(result.getIdToken().getJwtToken())));
       console.log("Refresh Token + " + JSON.stringify(result.getRefreshToken().getToken()));*/
