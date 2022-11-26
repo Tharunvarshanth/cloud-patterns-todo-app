@@ -10,7 +10,7 @@ const client = new Client({
   host: "todo-app-cloud.cdle6ghs5azs.ap-south-1.rds.amazonaws.com",
   port: 5432,
   user: "postgres",
-  password: "rootroot",
+  password: "todoappcloud",
   database: "todo",
 });
 
