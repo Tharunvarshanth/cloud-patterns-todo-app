@@ -51,6 +51,14 @@ router.get("/index", function (req, res) {
   res.send({});
 });
 
-app.use("/", router);
+app.use("/auth", router);
 
 module.exports = app;
+
+//delete node_modules/.cache, amazon-cognito-/android, amazon-cognito-/ios,
+
+//https://github.com/prisma/prisma-examples
+//npx prisma generate
+//db-migrate up
+//sam build
+//sam deploy
