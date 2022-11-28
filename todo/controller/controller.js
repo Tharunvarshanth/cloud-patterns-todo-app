@@ -4,6 +4,21 @@ const moment = require("moment");
 //const CognitoJwtVerifier = require("aws-jwt-verify").CognitoJwtVerifier;
 const jwt_decode = require("jwt-decode");
 
+async function getUserId(req) {
+  const authHeader = String(req.headers["authorization"] || "");
+  if (authHeader.startsWith("Bearer ")) {
+    const token = authHeader.substring(7, authHeader.length);
+    var decoded = jwt_decode(token);
+    console.log(decoded?.sub);
+  }
+  var user = await prisma.users.findUnique({
+    where:{
+      key:decoded?.sub
+    }
+  })
+  console.log(user)
+   return user.id
+}
 exports.getAllTasks = async (req, res) => {
   // Verifier that expects valid access tokens:
   // const verifier = CognitoJwtVerifier.create({
@@ -13,16 +28,11 @@ exports.getAllTasks = async (req, res) => {
   // });
 
   try {
-    const authHeader = String(req.headers["authorization"] || "");
-    if (authHeader.startsWith("Bearer ")) {
-      const token = authHeader.substring(7, authHeader.length);
-      var decoded = jwt_decode(token);
-      console.log(decoded?.sub);
-    }
+    
 
     let data = await prisma.tasks.findMany({
       where: {
-        userId: 1,
+        userId: await getUserId(req),
       },
     });
     return res.json(data);
@@ -47,7 +57,7 @@ exports.addTask = async (req, res) => {
 
     let data = await prisma.tasks.create({
       data: {
-        userId: 1,
+        userId: await getUserId(req),
         title: req.body.title,
         description: req.body.description,
         timestampCreated: moment().toISOString(),
