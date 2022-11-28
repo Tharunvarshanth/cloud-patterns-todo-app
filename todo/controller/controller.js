@@ -17,7 +17,7 @@ exports.getAllTasks = async (req, res) => {
     if (authHeader.startsWith("Bearer ")) {
       const token = authHeader.substring(7, authHeader.length);
       var decoded = jwt_decode(token);
-      console.log(decoded);
+      console.log(decoded?.sub);
     }
 
     let data = await prisma.tasks.findMany({
