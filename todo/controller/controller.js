@@ -2,6 +2,7 @@ const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 const moment = require('moment')
 //const CognitoJwtVerifier = require("aws-jwt-verify").CognitoJwtVerifier;
+const jwt_decode = require("jwt-decode").jwt_decode;
 
 exports.getAllTasks = async (req, res) => {
   // Verifier that expects valid access tokens:
@@ -12,11 +13,18 @@ exports.getAllTasks = async (req, res) => {
   // });
 
   try {
-    // const payload = await verifier.verify(
-    //   req.authorization
-    // );
-    // console.log("Token is valid. Payload:", payload);
-
+    
+    const authHeader = String(req.headers['authorization'] || '');
+    if (authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7, authHeader.length);
+      var decoded = jwt_decode(token);
+      console.log(decoded)
+       const payload = await verifier.verify(
+        token
+    );
+    console.log("Token is valid. Payload:", payload);
+    }
+     
     let data = await prisma.tasks.findMany({
       where:{
         userId:1
