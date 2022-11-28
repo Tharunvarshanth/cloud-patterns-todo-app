@@ -1,8 +1,8 @@
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
-const moment = require('moment')
+const moment = require("moment");
 //const CognitoJwtVerifier = require("aws-jwt-verify").CognitoJwtVerifier;
-const jwt_decode = require("jwt-decode").jwt_decode;
+const jwt_decode = require("jwt-decode");
 
 exports.getAllTasks = async (req, res) => {
   // Verifier that expects valid access tokens:
@@ -13,26 +13,21 @@ exports.getAllTasks = async (req, res) => {
   // });
 
   try {
-    
-    const authHeader = String(req.headers['authorization'] || '');
-    if (authHeader.startsWith('Bearer ')) {
+    const authHeader = String(req.headers["authorization"] || "");
+    if (authHeader.startsWith("Bearer ")) {
       const token = authHeader.substring(7, authHeader.length);
       var decoded = jwt_decode(token);
-      console.log(decoded)
-       const payload = await verifier.verify(
-        token
-    );
-    console.log("Token is valid. Payload:", payload);
+      console.log(decoded);
     }
-     
+
     let data = await prisma.tasks.findMany({
-      where:{
-        userId:1
+      where: {
+        userId: 1,
       },
     });
     return res.json(data);
   } catch {
-    return res.status(400).send({mgs:'error'});
+    return res.status(400).send({ mgs: "error" });
     //console.log("Token not valid!");
   }
 };
@@ -61,7 +56,7 @@ exports.addTask = async (req, res) => {
     });
     return res.json(data);
   } catch {
-    return res.status(400).send({mgs:'error'});
+    return res.status(400).send({ mgs: "error" });
     //console.log("Token not valid!");
   }
   console.log(req);
@@ -82,8 +77,8 @@ exports.editTask = async (req, res) => {
     // console.log("Token is valid. Payload:", payload);
 
     let data = await prisma.tasks.update({
-      where:{
-        id:req.body.id
+      where: {
+        id: req.body.id,
       },
       data: {
         title: req.body.title,
@@ -93,7 +88,7 @@ exports.editTask = async (req, res) => {
     });
     return res.json(data);
   } catch {
-    return res.status(400).send({mgs:'error'});
+    return res.status(400).send({ mgs: "error" });
     //console.log("Token not valid!");
   }
 };
@@ -113,13 +108,13 @@ exports.deleteTask = async (req, res) => {
     // console.log("Token is valid. Payload:", payload);
 
     let data = await prisma.tasks.delete({
-      where:{
-        id:req.body.id
+      where: {
+        id: req.body.id,
       },
     });
     return res.json(data);
   } catch {
-    return res.status(400).send({mgs:'error'});
+    return res.status(400).send({ mgs: "error" });
     //console.log("Token not valid!");
   }
 };
