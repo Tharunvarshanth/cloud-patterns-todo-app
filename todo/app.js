@@ -24,7 +24,7 @@ client
   });
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
-const { addTask, deleteTask, editTask,getAllTasks } = require("./controller/controller");
+const { addTask, deleteTask, editTask, getAllTasks } = require("./controller/controller");
 
 var poolData = {
   UserPoolId: "ap-south-1_FCM3q2v34", // Your user pool id here
@@ -52,6 +52,6 @@ router.get("/index", function (req, res) {
   res.send({});
 });
 
-app.use("/", router);
+app.use("/todo", router);
 
 module.exports = app;
