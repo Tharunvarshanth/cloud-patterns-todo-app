@@ -1,46 +1,54 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: >
+Description: "sam-app
 
+  Sample SAM Template for sam-app
+
+  "
 Globals:
   Function:
-    Timeout: 600
+    Timeout: 3
+    Tracing: Active
+  Api:
+    TracingEnabled: True
 
 Resources:
-  AuthApi:
+  UserApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
       BinaryMediaTypes: ["*/*"]
-
-  AuthFunction:
+  UserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: auth/
-      Handler: lambda.handler
-      Runtime: nodejs18.x
-      MemorySize: 512
+      PackageType: Image
+      Architectures:
+        - x86_64
       Events:
-        AuthFunctionProxy:
+        UserFunctionProxy:
           Type: Api
           Properties:
-            RestApiId: !Ref AuthApi
+            RestApiId: !Ref UserApi
             Path: "/{proxy+}"
             Method: ANY
-        AuthFunctionRoot:
+        UserFunctionRoot:
           Type: Api
           Properties:
-            RestApiId: !Ref AuthApi
+            RestApiId: !Ref UserApi
             Path: "/"
             Method: ANY
+    Metadata:
+      DockerTag: nodejs18.x-v1
+      DockerContext: ./auth
+      Dockerfile: Dockerfile
 
 Outputs:
-  AuthFunctiondApi:
-    Description: "API Gateway endpoint URL for dev stage for Auth function"
-    Value: !Sub "https://${AuthApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
-  AuthFunction:
-    Description: "Auth Lambda Function ARN"
-    Value: !GetAtt AuthFunction.Arn
-  AuthFunctionIamRole:
-    Description: "Implicit IAM Role created for Auths function"
-    Value: !GetAtt AuthFunctionRole.Arn
+  UserFunctiondApi:
+    Description: "API Gateway endpoint URL for dev stage for User function"
+    Value: !Sub "https://${UserApi}.execute-api.${AWS::Region}.amazonaws.com/dev/api"
+  UserFunction:
+    Description: "User Lambda Function ARN"
+    Value: !GetAtt UserFunction.Arn
+  UserFunctionIamRole:
+    Description: "Implicit IAM Role created for Users function"
+    Value: !GetAtt UserFunctionRole.Arn
