@@ -7,40 +7,40 @@ Globals:
     Timeout: 600
 
 Resources:
-  AuthApi:
+  TodoApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
       BinaryMediaTypes: ["*/*"]
 
-  AuthFunction:
+  TodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: auth/
+      CodeUri: todo/
       Handler: lambda.handler
       Runtime: nodejs18.x
       MemorySize: 512
       Events:
-        AuthFunctionProxy:
+        TodoFunctionProxy:
           Type: Api
           Properties:
-            RestApiId: !Ref AuthApi
+            RestApiId: !Ref TodoApi
             Path: "/{proxy+}"
             Method: ANY
-        AuthFunctionRoot:
+        TodoFunctionRoot:
           Type: Api
           Properties:
-            RestApiId: !Ref AuthApi
+            RestApiId: !Ref TodoApi
             Path: "/"
             Method: ANY
 
 Outputs:
-  AuthFunctiondApi:
-    Description: "API Gateway endpoint URL for dev stage for Auth function"
-    Value: !Sub "https://${AuthApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
-  AuthFunction:
-    Description: "Auth Lambda Function ARN"
-    Value: !GetAtt AuthFunction.Arn
-  AuthFunctionIamRole:
-    Description: "Implicit IAM Role created for Auths function"
-    Value: !GetAtt AuthFunctionRole.Arn
+  TodoFunctiondApi:
+    Description: "API Gateway endpoint URL for dev stage for Todo function"
+    Value: !Sub "https://${TodoApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
+  TodoFunction:
+    Description: "Todo Lambda Function ARN"
+    Value: !GetAtt TodoFunction.Arn
+  TodoFunctionIamRole:
+    Description: "Implicit IAM Role created for Todos function"
+    Value: !GetAtt TodoFunctionRole.Arn
