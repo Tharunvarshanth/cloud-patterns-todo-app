@@ -56,20 +56,20 @@ router.get("/index", function (req, res) {
 });
 
 app.use("/", router);
-//const port = 3000;
-//app.listen(port);
+const port = 3000;
+app.listen(port);
 console.log("server started");
 module.exports = app;
 
 //delete node_modules/.cache, amazon-cognito-/android, amazon-cognito-/ios,
-
+//aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 414608916390.dkr.ecr.ap-south-1.amazonaws.com
 //https://github.com/prisma/prisma-examples
 //npx prisma generate
 //db-migrate up
 //sam build
 //sam deploy
 
-//docker tag 0b1ba4e9141d 414608916390.dkr.ecr.ap-south-1.amazonaws.com/cloud-auth-api:0.0.2
-//docker push 414608916390.dkr.ecr.ap-south-1.amazonaws.com/cloud-auth-api:0.0.2
+//docker tag  e66abac25bb7 414608916390.dkr.ecr.ap-south-1.amazonaws.com/user-auth-todo:0.0.3
+//docker push 414608916390.dkr.ecr.ap-south-1.amazonaws.com/user-auth-todo:0.0.3
 
 //https://aws.amazon.com/blogs/compute/using-container-image-support-for-aws-lambda-with-aws-sam/
