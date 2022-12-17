@@ -19,7 +19,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
-      ImageUri: 414608916390.dkr.ecr.ap-south-1.amazonaws.com/user-auth-todo:0.0.3
+      ImageUri: 414608916390.dkr.ecr.ap-south-1.amazonaws.com/user-auth-todo:0.0.6
       Architectures:
         - x86_64
       Events:

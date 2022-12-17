@@ -1,11 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "windows","linux-musl"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x", "windows", "linux-musl"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:todoappcloud@todo-app-cloud.cdle6ghs5azs.ap-south-1.rds.amazonaws.com"
 }
 
 model migrations {

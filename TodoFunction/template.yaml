@@ -7,40 +7,44 @@ Globals:
     Timeout: 600
 
 Resources:
-  TodoApi:
+  UserTodoApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
       BinaryMediaTypes: ["*/*"]
 
-  TodoFunction:
+  UserTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: todo/
-      Handler: lambda.handler
-      Runtime: nodejs18.x
-      MemorySize: 512
+      PackageType: Image
+      ImageUri: 414608916390.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.2
+      Architectures:
+        - x86_64
       Events:
-        TodoFunctionProxy:
+        UserTodoFunctionProxy:
           Type: Api
           Properties:
-            RestApiId: !Ref TodoApi
+            RestApiId: !Ref UserTodoApi
             Path: "/{proxy+}"
             Method: ANY
-        TodoFunctionRoot:
+        UserTodoFunctionRoot:
           Type: Api
           Properties:
-            RestApiId: !Ref TodoApi
+            RestApiId: !Ref UserTodoApi
             Path: "/"
             Method: ANY
+    Metadata:
+      DockerTag: nodejs18.x-v1
+      DockerContext: ./todo
+      Dockerfile: Dockerfile
 
 Outputs:
-  TodoFunctiondApi:
-    Description: "API Gateway endpoint URL for dev stage for Todo function"
-    Value: !Sub "https://${TodoApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
-  TodoFunction:
-    Description: "Todo Lambda Function ARN"
-    Value: !GetAtt TodoFunction.Arn
-  TodoFunctionIamRole:
+  UserTodoFunctiondApi:
+    Description: "API Gateway endpoint URL for dev stage for UserTodo function"
+    Value: !Sub "https://${UserTodoApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
+  UserTodoFunction:
+    Description: "UserTodo Lambda Function ARN"
+    Value: !GetAtt UserTodoFunction.Arn
+  UserTodoFunctionIamRole:
     Description: "Implicit IAM Role created for Todos function"
-    Value: !GetAtt TodoFunctionRole.Arn
+    Value: !GetAtt UserTodoFunctionRole.Arn

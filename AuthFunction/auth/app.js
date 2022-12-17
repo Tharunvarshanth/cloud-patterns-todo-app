@@ -56,8 +56,8 @@ router.get("/index", function (req, res) {
 });
 
 app.use("/", router);
-const port = 3000;
-app.listen(port);
+//const port = 3000;
+//app.listen(port);
 console.log("server started");
 module.exports = app;
 

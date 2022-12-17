@@ -4,8 +4,7 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const { Client } = require("pg");
-
+/*
 const client = new Client({
   host: "todo-app-cloud.cdle6ghs5azs.ap-south-1.rds.amazonaws.com",
   port: 5432,
@@ -22,6 +21,7 @@ client
   .catch((err) => {
     console.log(err);
   });
+  */
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 const { addTask, deleteTask, editTask, getAllTasks } = require("./controller/controller");

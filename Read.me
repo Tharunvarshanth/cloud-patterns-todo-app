@@ -1,0 +1,18 @@
+deployement
+1)sam build
+2)docker tag  66a6772b12b2 414608916390.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.2
+3)change image uri in template file
+4)sam deploy
+
+Prisma
+Auth -
+db-migrate up
+npx prisma db pull
+npx prisma db generate
+
+Todo-
+npx prisma db pull
+npx prisma db generate
+
+create ecr repo
+aws ecr create-repository --repository-name cloud-app-todo-function --image-tag-mutability IMMUTABLE --image-scanning-configuration scanOnPush=true
