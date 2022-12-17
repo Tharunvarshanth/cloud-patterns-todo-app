@@ -25,6 +25,7 @@
     "prisma": "^4.6.1"
   },
   "scripts": {
-    "dev": "nodemon app.local.js"
+    "dev": "nodemon app.local.js",
+    "server": "node app.js"
   }
 }
