@@ -1,7 +1,7 @@
 deployement
 1)sam build
 2)docker tag de9f5553276c 203084879193.dkr.ecr.ap-south-1.amazonaws.com/user-function:0.0.3
-docker tag e80595481ffd 203084879193.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.3
+docker tag  408dec98e72a 203084879193.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.4
 3)change image uri in template file
 4)sam deploy
 
@@ -20,3 +20,6 @@ npx prisma db generate
 
 create ecr repo
 aws ecr create-repository --repository-name cloud-app-todo-function --image-tag-mutability IMMUTABLE --image-scanning-configuration scanOnPush=true
+
+
+docker tag 7319fcb96b18 203084879193.dkr.ecr.ap-south-1.amazonaws.com/user-function:0.0.4
