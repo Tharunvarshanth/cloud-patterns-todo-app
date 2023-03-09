@@ -11,13 +11,18 @@ async function getUserId(req) {
     var decoded = jwt_decode(token);
     console.log(decoded?.sub);
   }
-  var user = await prisma.users.findUnique({
-    where:{
-      key:decoded?.sub
-    }
-  })
-  console.log(user)
-   return user.id
+  try {
+    var user = await prisma.users.findUnique({
+      where: {
+        key: decoded?.sub,
+      },
+    });
+    console.log(user);
+    return user?.id;
+  } catch (err) {
+    console.log("ERROR : ", err);
+    return null;
+  }
 }
 exports.getAllTasks = async (req, res) => {
   // Verifier that expects valid access tokens:
@@ -28,16 +33,15 @@ exports.getAllTasks = async (req, res) => {
   // });
 
   try {
-    
-
     let data = await prisma.tasks.findMany({
       where: {
         userId: await getUserId(req),
       },
     });
     return res.json(data);
-  } catch {
-    return res.status(400).send({ mgs: "error" });
+  } catch (err) {
+    console.log("ERROR : ", err);
+    return res.status(400).send({ mgs: err });
     //console.log("Token not valid!");
   }
 };
@@ -65,11 +69,11 @@ exports.addTask = async (req, res) => {
       },
     });
     return res.json(data);
-  } catch {
-    return res.status(400).send({ mgs: "error" });
+  } catch (err) {
+    console.log("DB ERROR : ", err);
+    return res.status(400).send({ mgs: err });
     //console.log("Token not valid!");
   }
-  console.log(req);
 };
 
 exports.editTask = async (req, res) => {
