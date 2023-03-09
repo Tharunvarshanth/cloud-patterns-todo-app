@@ -17,7 +17,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
-      ImageUri: 203084879193.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.2
+      ImageUri: 203084879193.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.3
       Architectures:
         - x86_64
       Events:

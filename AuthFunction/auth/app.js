@@ -5,13 +5,13 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const { Client } = require("pg");
-/*
+
 const client = new Client({
-  host: "todo-app-cloud.cdle6ghs5azs.ap-south-1.rds.amazonaws.com",
+  host: "todo-app-cloud-new.cimpsfx1hrlb.ap-south-1.rds.amazonaws.com",
   port: 5432,
   user: "postgres",
-  password: "todoappcloud",
-  database: "todo",
+  password: "adminadmin",
+  database: "todo_app",
 });
 
 client
@@ -22,7 +22,7 @@ client
   .catch((err) => {
     console.log("DB ERROR", err);
   });
-*/
+
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 const { signUp, login, confirmation } = require("./controller/controller");
