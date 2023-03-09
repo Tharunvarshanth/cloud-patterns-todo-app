@@ -27,8 +27,8 @@ const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 const { addTask, deleteTask, editTask, getAllTasks } = require("./controller/controller");
 
 var poolData = {
-  UserPoolId: "ap-south-1_FCM3q2v34", // Your user pool id here
-  ClientId: "6k8it7fkegj23mu7bkshdm01fj", // Your client id here
+  UserPoolId: "ap-south-1_9cDZ9Qhek", // Your user pool id here
+  ClientId: "7t3mhpalqehch1jklujlga9cip", // Your client id here
 };
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);

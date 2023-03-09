@@ -1,8 +1,11 @@
 deployement
 1)sam build
-2)docker tag  66a6772b12b2 414608916390.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.2
+2)docker tag d090048f44d9 203084879193.dkr.ecr.ap-south-1.amazonaws.com/todo-function:0.0.1
 3)change image uri in template file
 4)sam deploy
+docker push 414608916390.dkr.ecr.ap-south-1.amazonaws.com/user-auth-todo:0.0.3
+
+(Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin 203084879193.dkr.ecr.ap-south-1.amazonaws.com
 
 Prisma
 Auth -

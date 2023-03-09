@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:todoappcloud@todo-app-cloud.cdle6ghs5azs.ap-south-1.rds.amazonaws.com"
+  url      = "postgresql://postgres:adminadmin@cloud-todo-app-rds.cimpsfx1hrlb.ap-south-1.rds.amazonaws.com:5432/todo"
 }
 
 model migrations {
